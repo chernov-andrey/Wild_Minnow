@@ -6,6 +6,8 @@
 #include "Engine/GameInstance.h"
 #include "GameInstance_WM.generated.h"
 
+
+class UUW_MainMenu;
 /**
  * 
  */
@@ -23,4 +25,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
 	FName MenuLevel_Name;
 	
+
+
 };

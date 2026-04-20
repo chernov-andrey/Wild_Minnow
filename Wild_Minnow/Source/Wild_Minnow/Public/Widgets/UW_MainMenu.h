@@ -16,6 +16,7 @@ enum class EMenuCommand :uint8
 	MC_LoadGame,
 	MC_Settings,
 	MC_Credits,
+	MC_Manual,
 	MC_Exit,
 	NOCOMMAND
 
@@ -28,6 +29,8 @@ class WILD_MINNOW_API UUW_MainMenu : public UUserWidget
 	
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnterCommand, EMenuCommand, Command);
+	UPROPERTY(BlueprintAssignable)
+	FEnterCommand OnEnterCommand;
 
 protected:
 
@@ -41,6 +44,12 @@ private:
 	UFUNCTION()
 	void OnStartNewGameButtonClicked();
 
+	//Open manual Button --------------------------------------------------------------------------
+	UPROPERTY(meta = (BindWidget))
+	UButton* OpenManualButton;
+
+	UFUNCTION()
+	void OnOpenManualButtonClicked();
 
 	//ExitGameButton --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))

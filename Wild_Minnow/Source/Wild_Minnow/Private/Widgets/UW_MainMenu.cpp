@@ -22,3 +22,6 @@ void UUW_MainMenu::OnSoundVolumeSliderChanged(float Value)
 {
 }
 
+void UUW_MainMenu::OnOpenManualButtonClicked()
+{
+}
