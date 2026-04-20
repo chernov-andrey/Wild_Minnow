@@ -13,5 +13,14 @@ UCLASS()
 class WILD_MINNOW_API UGameInstance_WM : public UGameInstance
 {
 	GENERATED_BODY()
+
+public:
+	virtual void Init() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
+	FName StartLevel_Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
+	FName MenuLevel_Name;
 	
 };
