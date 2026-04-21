@@ -25,6 +25,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
 	FName MenuLevel_Name;
 	
+	UFUNCTION()
+	void ExecutingMenuCommand(EMenuCommand Command);
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUW_MainMenu> MainMenuClass;
+
+	UFUNCTION(BlueprintCallable)
+	void OpenMainMenu();
+
+private:
+
+	UUW_MainMenu* MainMenuWidget;
 
 
 };

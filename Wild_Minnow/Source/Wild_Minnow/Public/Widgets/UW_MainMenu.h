@@ -30,7 +30,7 @@ class WILD_MINNOW_API UUW_MainMenu : public UUserWidget
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnterCommand, EMenuCommand, Command);
 	UPROPERTY(BlueprintAssignable)
-	FEnterCommand OnEnterCommand;
+	FEnterCommand OnEnterCommandEvent;
 
 protected:
 

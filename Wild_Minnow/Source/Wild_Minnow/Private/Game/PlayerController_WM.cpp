@@ -3,3 +3,12 @@
 
 #include "Game/PlayerController_WM.h"
 
+
+void APlayerController_WM::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+
+
