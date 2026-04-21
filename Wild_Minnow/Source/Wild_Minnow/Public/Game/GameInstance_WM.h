@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "SaveGame_Settings.h"
 #include "GameInstance_WM.generated.h"
 
 
