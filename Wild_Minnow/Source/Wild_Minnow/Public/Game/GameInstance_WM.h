@@ -34,6 +34,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OpenMainMenu();
 
+	UPROPERTY()
+	APlayerController* PlayerController;
+
 private:
 
 	UUW_MainMenu* MainMenuWidget;

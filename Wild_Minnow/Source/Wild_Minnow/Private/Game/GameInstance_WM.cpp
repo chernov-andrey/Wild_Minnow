@@ -24,6 +24,7 @@ void UGameInstance_WM::OpenMainMenu()
 	check(MainMenuClass);
 	MainMenuWidget = CreateWidget<UUW_MainMenu>(this, MainMenuClass);
 	MainMenuWidget->AddToViewport();
+
 	check(MainMenuWidget);
 	MainMenuWidget->OnEnterCommandEvent.AddDynamic(this, &ThisClass::ExecutingMenuCommand);
 }
@@ -33,7 +34,7 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 	switch (Command)
 	{
 	case EMenuCommand::MC_NewGame:
-		UGameplayStatics::OpenLevel(GetWorld(), "Level_1");
+		UGameplayStatics::OpenLevel(GetWorld(), StartLevel_Name);
 		MainMenuWidget->RemoveFromParent();
 		break;
 	case EMenuCommand::MC_LoadGame:
@@ -49,7 +50,7 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 
 		break;
 	case EMenuCommand::MC_Exit:
-		MainMenuWidget->RemoveFromParent();
+		PlayerController->ConsoleCommand("quit");
 		break;
 	case EMenuCommand::NOCOMMAND:
 		break;
