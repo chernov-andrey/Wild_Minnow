@@ -32,6 +32,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FEnterCommand OnEnterCommandEvent;
 
+	void LoadSettings(float MasterVolume);
+
 protected:
 
 	virtual void NativeConstruct() override;

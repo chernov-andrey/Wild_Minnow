@@ -5,6 +5,12 @@
 #include "Components/Button.h"
 #include "Components/Slider.h"
 
+void UUW_MainMenu::LoadSettings(float MasterVolume)
+{
+	check(SoundVolumeSlider);
+	SoundVolumeSlider->SetValue(MasterVolume);
+}
+
 void UUW_MainMenu::NativeConstruct()
 {
 	Super::NativeConstruct();

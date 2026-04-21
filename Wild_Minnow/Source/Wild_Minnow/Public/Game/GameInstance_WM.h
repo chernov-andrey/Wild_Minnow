@@ -6,7 +6,7 @@
 #include "Engine/GameInstance.h"
 #include "GameInstance_WM.generated.h"
 
-
+class USaveGame_Settings;
 class UUW_MainMenu;
 /**
  * 
@@ -36,6 +36,14 @@ public:
 
 	UPROPERTY()
 	APlayerController* PlayerController;
+
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<USaveGame_Settings> CurrentSettings;
+
+	bool Load_Settings();
+	bool Save_Settings();
+
+	FString SettingsSlot_Name = "SettingsSlot";
 
 private:
 

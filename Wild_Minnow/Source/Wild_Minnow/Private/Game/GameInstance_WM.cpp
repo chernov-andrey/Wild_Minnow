@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Widgets/UW_MainMenu.h"
 
+#include "SaveGame_Settings.h"
+
 
 void UGameInstance_WM::Init()
 {
@@ -16,6 +18,8 @@ void UGameInstance_WM::Init()
 		UGameplayStatics::OpenLevel(GetWorld(), MenuLevel_Name);
 	}
 #endif
+
+	Load_Settings();
 	Super::Init();
 }
 
@@ -27,6 +31,48 @@ void UGameInstance_WM::OpenMainMenu()
 
 	check(MainMenuWidget);
 	MainMenuWidget->OnEnterCommandEvent.AddDynamic(this, &ThisClass::ExecutingMenuCommand);
+	MainMenuWidget->LoadSettings(CurrentSettings->MasterVolume);
+}
+
+bool UGameInstance_WM::Load_Settings()
+{
+	CurrentSettings = Cast<USaveGame_Settings>(UGameplayStatics::LoadGameFromSlot(SettingsSlot_Name, 0));
+
+	if (CurrentSettings)
+	{
+		UE_LOG(LogTemp,Log,TEXT("SaveSettings loaded successfully!"));
+		return true;	
+	}
+
+	CurrentSettings = Cast<USaveGame_Settings>(UGameplayStatics::CreateSaveGameObject(USaveGame_Settings::StaticClass()));
+	if (CurrentSettings)
+	{
+		UE_LOG(LogTemp, Log, TEXT("New SaveSettings created!"));
+		return true;
+	}
+
+	UE_LOG(LogTemp, Error, TEXT("Failed to load or create save game"));
+	return false;
+}
+
+bool UGameInstance_WM::Save_Settings()
+{
+	if (!CurrentSettings)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No save game instance to save"));
+		return false;
+	}
+
+	bool bSuccess = UGameplayStatics::SaveGameToSlot(CurrentSettings, SettingsSlot_Name, 0);
+	if (bSuccess)
+	{
+		UE_LOG(LogTemp, Log, TEXT("Game saved successfully"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to save game"));
+	}
+	return bSuccess;
 }
 
 void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
