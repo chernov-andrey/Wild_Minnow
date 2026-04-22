@@ -34,31 +34,26 @@ void UGameInstance_WM::ApplyDefaulSettigs()
 		UE_LOG(LogTemp, Error, TEXT("UGameInstance_WM::OpenMainMenu: MasterSoundMix.IsNull - true"));
 	}
 
-	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
-		MasterSoundMix,
-		Master_SoundClass,
-		CurrentSettings->MasterScaleVolume,      
-		1,
-		0  
-	);
+	float Scale = CurrentSettings->MasterScaleVolume;
+
 	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
 		MasterSoundMix,
 		UI_Effects_SoundClass,
-		CurrentSettings->UIEffectVolume,
+		FMath::Max(0.002,CurrentSettings->UIEffectVolume* Scale),
 		1,
 		0
 	);
 	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
 		MasterSoundMix,
 		Music_SoundClass,
-		CurrentSettings->MusicVolume,
+		FMath::Max(0.002, CurrentSettings->MusicVolume * Scale),
 		1,
 		0
 	);
 	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
 		MasterSoundMix,
 		Game_Effects_SoundClass,
-		CurrentSettings->GameEffectVolume,
+		FMath::Max(0.002, CurrentSettings->GameEffectVolume * Scale),
 		1,
 		0
 	);
@@ -83,45 +78,50 @@ void UGameInstance_WM::SetSCVolume( ESoundClass SC, float NewVolume)
 	check(CurrentSettings);
 	float Volume =FMath::Clamp(NewVolume, 0.002, 1.0);
 	
-	USoundClass* USC = nullptr;
 	switch (SC)
 	{
 	case ESoundClass::SC_Master:
 		CurrentSettings->MasterScaleVolume = Volume;
-		USC = Master_SoundClass;
 		break;
 	case ESoundClass::SC_Music:
-		Volume = FMath::Max(0.02,Volume);
 		CurrentSettings->MusicVolume = Volume;
-		USC = Music_SoundClass;
 		break;
 	case ESoundClass::SC_GameEffects:
-		Volume = FMath::Max(0.01, Volume);
 		CurrentSettings->GameEffectVolume = Volume;
-		USC = Game_Effects_SoundClass;
 		break;
 	case ESoundClass::SC_UIEffects:
-		Volume = FMath::Max(0.01, Volume);
 		CurrentSettings->UIEffectVolume = Volume;
-		USC = UI_Effects_SoundClass;
 		break;
 	case ESoundClass::SC_non:
-		UE_LOG(LogTemp, Error, TEXT(" UGameInstance_WM::SetSCVolume: ESoundClass SC - SC_non"));
+		return;
 		break;
 	default:
 		break;
 	}
 
+	float Scale = CurrentSettings->MasterScaleVolume;
 
-	if (USC) {
-		UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
-			MasterSoundMix,
-			USC,
-			Volume,
-			1,
-			0.3
-		);
-	}
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		UI_Effects_SoundClass,
+		FMath::Max(0.002, CurrentSettings->UIEffectVolume * Scale),
+		1,
+		0
+	);
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		Music_SoundClass,
+		FMath::Max(0.002, CurrentSettings->MusicVolume * Scale),
+		1,
+		0
+	);
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		Game_Effects_SoundClass,
+		FMath::Max(0.002, CurrentSettings->GameEffectVolume * Scale),
+		1,
+		0
+	);
 }
 
 bool UGameInstance_WM::Load_Settings()

@@ -30,8 +30,6 @@ protected:
 
 	virtual void NativeConstruct() override;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void OnOpenSettingsButtonClicked();
 private:
 	// NewGameButton --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))
@@ -43,15 +41,17 @@ private:
 	//Open manual Button --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))
 	UButton* OpenManualButton;
-
-	UFUNCTION()
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
 	void OnOpenManualButtonClicked();
-
+private:
 	//Open Settings Button --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))
 	UButton* OpenSettingsButton;
-
-
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnOpenSettingsButtonClicked();
+private:
 	//ExitGameButton --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExitGameButton;
@@ -59,18 +59,18 @@ private:
 	UFUNCTION()
 	void OnExitGameButtonClicked();
 
-
+protected:
 	//Master volume slider --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite,meta = (BindWidget))
 	USlider* MasterVolumeSlider;
-
+private:
 	UFUNCTION()
 	void OnMasterVolumeSliderChanged(float Value);
-
+protected:
 	//Master 2 volume slider --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	USlider* MasterVolumeSlider_2;
-
+private:
 	UFUNCTION()
 	void OnMasterVolumeSlider_2_Changed(float Value);
 

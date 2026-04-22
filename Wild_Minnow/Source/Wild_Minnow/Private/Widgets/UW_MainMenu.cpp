@@ -106,13 +106,3 @@ void UUW_MainMenu::OnUIEffectsVolumeSliderChanged(float Value)
 	OnChangedSCVolumeEvent.ExecuteIfBound(ESoundClass::SC_UIEffects, Value);
 }
 
-
-void UUW_MainMenu::OnOpenManualButtonClicked()
-{
-	OnEnterCommandEvent.ExecuteIfBound(EMenuCommand::MC_Manual);
-}
-
-
-
-
-
