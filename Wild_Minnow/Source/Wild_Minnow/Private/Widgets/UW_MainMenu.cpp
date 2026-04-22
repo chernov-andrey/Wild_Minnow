@@ -5,11 +5,34 @@
 #include "Components/Button.h"
 #include "Components/Slider.h"
 
-void UUW_MainMenu::LoadSettings(float MasterVolume)
+
+FOnEnterCommand& UUW_MainMenu::OnEnterCommand()
 {
-	check(SoundVolumeSlider);
-	SoundVolumeSlider->SetValue(MasterVolume);
+	return OnEnterCommandEvent;
 }
+
+FOnChangedSettings& UUW_MainMenu::OnChangedSCVolume()
+{
+	return OnChangedSCVolumeEvent;
+}
+
+void UUW_MainMenu::SetStartValueMasterVolume(float Master,float Music, float Game, float UI)
+{
+	check(MasterVolumeSlider);
+	MasterVolumeSlider->SetValue(Master);
+	check(MasterVolumeSlider_2);
+	MasterVolumeSlider_2->SetValue(Master);
+
+	check(MusicVolumeSlider);
+	MusicVolumeSlider->SetValue(Music);
+
+	check(GameEffectsVolumeSlider);
+	GameEffectsVolumeSlider->SetValue(Game);
+
+	check(UIEffectsVolumeSlider);
+	UIEffectsVolumeSlider->SetValue(UI);
+}
+
 
 void UUW_MainMenu::NativeConstruct()
 {
@@ -20,31 +43,76 @@ void UUW_MainMenu::NativeConstruct()
 
 	check(ExitGameButton);
 	ExitGameButton->OnClicked.AddDynamic(this, &ThisClass::OnExitGameButtonClicked);
+
+	check(OpenSettingsButton);
+	OpenSettingsButton->OnClicked.AddDynamic(this, &ThisClass::OnOpenSettingsButtonClicked);
 	
 	check(OpenManualButton);
 	OpenManualButton->OnClicked.AddDynamic(this, &ThisClass::OnOpenManualButtonClicked);
 	
-	check(SoundVolumeSlider);
-	SoundVolumeSlider->OnValueChanged.AddDynamic(this, &ThisClass::OnSoundVolumeSliderChanged);
+	check(MasterVolumeSlider);
+	MasterVolumeSlider->OnValueChanged.AddDynamic(this, &ThisClass::OnMasterVolumeSliderChanged);
+
+	check(MasterVolumeSlider_2);
+	MasterVolumeSlider_2->OnValueChanged.AddDynamic(this, &ThisClass::OnMasterVolumeSlider_2_Changed);
+
+	check(MusicVolumeSlider);
+	MusicVolumeSlider->OnValueChanged.AddDynamic(this, &ThisClass::OnMusicVolumeSliderChanged);
+
+	check(GameEffectsVolumeSlider);
+	GameEffectsVolumeSlider->OnValueChanged.AddDynamic(this, &ThisClass::OnGameEffectsVolumeSliderChanged);
+
+	check(UIEffectsVolumeSlider);
+	UIEffectsVolumeSlider->OnValueChanged.AddDynamic(this, &ThisClass::OnUIEffectsVolumeSliderChanged);
 }
 
 void UUW_MainMenu::OnStartNewGameButtonClicked()
 {
-	OnEnterCommandEvent.Broadcast(EMenuCommand::MC_NewGame);
+	OnEnterCommandEvent.ExecuteIfBound(EMenuCommand::MC_NewGame);
 }
 
 void UUW_MainMenu::OnExitGameButtonClicked()
 {
-	OnEnterCommandEvent.Broadcast(EMenuCommand::MC_Exit);
+	OnEnterCommandEvent.ExecuteIfBound(EMenuCommand::MC_Exit);
 }
 
-void UUW_MainMenu::OnSoundVolumeSliderChanged(float Value)
+
+// master volume -----------------------------------------------------------------------------------------------------------------------------------
+
+void UUW_MainMenu::OnMasterVolumeSliderChanged(float Value)
 {
-	OnEnterCommandEvent.Broadcast(EMenuCommand::NOCOMMAND);
+	OnChangedSCVolumeEvent.ExecuteIfBound(ESoundClass::SC_Master, Value);
 }
+
+void UUW_MainMenu::OnMasterVolumeSlider_2_Changed(float Value)
+{
+	OnChangedSCVolumeEvent.ExecuteIfBound(ESoundClass::SC_Master, Value);
+}
+
+// other volume -----------------------------------------------------------------------------------------------------------------------------------
+
+void UUW_MainMenu::OnMusicVolumeSliderChanged(float Value)
+{
+	OnChangedSCVolumeEvent.ExecuteIfBound(ESoundClass::SC_Music, Value);
+}
+
+void UUW_MainMenu::OnGameEffectsVolumeSliderChanged(float Value)
+{
+	OnChangedSCVolumeEvent.ExecuteIfBound(ESoundClass::SC_GameEffects, Value);
+}
+
+void UUW_MainMenu::OnUIEffectsVolumeSliderChanged(float Value)
+{
+	OnChangedSCVolumeEvent.ExecuteIfBound(ESoundClass::SC_UIEffects, Value);
+}
+
 
 void UUW_MainMenu::OnOpenManualButtonClicked()
 {
-	OnEnterCommandEvent.Broadcast(EMenuCommand::MC_Manual);
+	OnEnterCommandEvent.ExecuteIfBound(EMenuCommand::MC_Manual);
 }
+
+
+
+
 

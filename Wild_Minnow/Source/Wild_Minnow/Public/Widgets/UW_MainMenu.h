@@ -4,40 +4,34 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Interfaces\Interface_menu.h"
 #include "UW_MainMenu.generated.h"
 
 class UButton;
 class USlider;
 
-UENUM(BlueprintType)
-enum class EMenuCommand :uint8
-{
-	MC_NewGame,
-	MC_LoadGame,
-	MC_Settings,
-	MC_Credits,
-	MC_Manual,
-	MC_Exit,
-	NOCOMMAND
-
-};
 
 UCLASS()
-class WILD_MINNOW_API UUW_MainMenu : public UUserWidget
+class WILD_MINNOW_API UUW_MainMenu : public UUserWidget, public IInterface_menu
 {
 	GENERATED_BODY()
 	
 public:
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnterCommand, EMenuCommand, Command);
-	UPROPERTY(BlueprintAssignable)
-	FEnterCommand OnEnterCommandEvent;
+	
+	//UPROPERTY(BlueprintAssignable)
+	FOnEnterCommand OnEnterCommandEvent;
+	FOnChangedSettings OnChangedSCVolumeEvent;
 
-	void LoadSettings(float MasterVolume);
+	virtual FOnEnterCommand& OnEnterCommand() override;
+	virtual FOnChangedSettings& OnChangedSCVolume()override;
+	virtual void SetStartValueMasterVolume(float Master, float Music, float Game, float UI) override;
 
 protected:
 
 	virtual void NativeConstruct() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnOpenSettingsButtonClicked();
 private:
 	// NewGameButton --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))
@@ -53,6 +47,11 @@ private:
 	UFUNCTION()
 	void OnOpenManualButtonClicked();
 
+	//Open Settings Button --------------------------------------------------------------------------
+	UPROPERTY(meta = (BindWidget))
+	UButton* OpenSettingsButton;
+
+
 	//ExitGameButton --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))
 	UButton* ExitGameButton;
@@ -61,10 +60,41 @@ private:
 	void OnExitGameButtonClicked();
 
 
-	//Sound volume slider --------------------------------------------------------------------------
+	//Master volume slider --------------------------------------------------------------------------
 	UPROPERTY(meta = (BindWidget))
-	USlider* SoundVolumeSlider;
+	USlider* MasterVolumeSlider;
 
 	UFUNCTION()
-	void OnSoundVolumeSliderChanged(float Value);
+	void OnMasterVolumeSliderChanged(float Value);
+
+	//Master 2 volume slider --------------------------------------------------------------------------
+	UPROPERTY(meta = (BindWidget))
+	USlider* MasterVolumeSlider_2;
+
+	UFUNCTION()
+	void OnMasterVolumeSlider_2_Changed(float Value);
+
+
+
+	//Music volume slider --------------------------------------------------------------------------
+	UPROPERTY(meta = (BindWidget))
+	USlider* MusicVolumeSlider;
+
+	UFUNCTION()
+	void OnMusicVolumeSliderChanged(float Value);
+
+	//GameEffects volume slider --------------------------------------------------------------------------
+	UPROPERTY(meta = (BindWidget))
+	USlider* GameEffectsVolumeSlider;
+
+	UFUNCTION()
+	void OnGameEffectsVolumeSliderChanged(float Value);
+
+	//UIEffects volume slider --------------------------------------------------------------------------
+	UPROPERTY(meta = (BindWidget))
+	USlider* UIEffectsVolumeSlider;
+
+	UFUNCTION()
+	void OnUIEffectsVolumeSliderChanged(float Value);
+
 };
