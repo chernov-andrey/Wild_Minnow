@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "Interfaces\Interface_menu.h"
 #include "GameInstance_WM.generated.h"
 
 
 class USaveGame_Settings;
 class UUW_MainMenu;
+
 /**
  * 
  */
@@ -41,11 +43,28 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<USaveGame_Settings> CurrentSettings;
 
+	FString SettingsSlot_Name = "SettingsSlot";
+
 	bool Load_Settings();
 	bool Save_Settings();
 
-	FString SettingsSlot_Name = "SettingsSlot";
+	void SetSCVolume(ESoundClass SC, float NewVolume);
+	void ApplyDefaulSettigs();
 
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TObjectPtr<USoundMix> MasterSoundMix;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundClass* Master_SoundClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundClass* UI_Effects_SoundClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundClass* Music_SoundClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	USoundClass* Game_Effects_SoundClass;
 private:
 
 	UUW_MainMenu* MainMenuWidget;

@@ -7,31 +7,121 @@
 #include "Widgets/UW_MainMenu.h"
 #include "SaveGame_Settings.h"
 
-
+#include "AudioDevice.h"
 
 void UGameInstance_WM::Init()
 {
+	Super::Init();
+	
 #if UE_BUILD_DEBUG || UE_BUILD_DEVELOPMENT
 #else
-	if (MenuLevel_Name != "") 
+	if (MenuLevel_Name != NAME_None)
 	{
 		UGameplayStatics::OpenLevel(GetWorld(), MenuLevel_Name);
 	}
 #endif
-
 	Load_Settings();
-	Super::Init();
 }
+void UGameInstance_WM::ApplyDefaulSettigs()
+{
+	if (MasterSoundMix)
+	{
+		check(GetWorld());
+		UGameplayStatics::SetBaseSoundMix(this, MasterSoundMix);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UGameInstance_WM::OpenMainMenu: MasterSoundMix.IsNull - true"));
+	}
+
+	float Scale = CurrentSettings->MasterScaleVolume;
+
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		UI_Effects_SoundClass,
+		FMath::Max(0.002,CurrentSettings->UIEffectVolume* Scale),
+		1,
+		0
+	);
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		Music_SoundClass,
+		FMath::Max(0.002, CurrentSettings->MusicVolume * Scale),
+		1,
+		0
+	);
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		Game_Effects_SoundClass,
+		FMath::Max(0.002, CurrentSettings->GameEffectVolume * Scale),
+		1,
+		0
+	);
+}
+
 
 void UGameInstance_WM::OpenMainMenu()
 {
+	ApplyDefaulSettigs();
 	check(MainMenuClass);
 	MainMenuWidget = CreateWidget<UUW_MainMenu>(this, MainMenuClass);
 	MainMenuWidget->AddToViewport();
 
 	check(MainMenuWidget);
-	MainMenuWidget->OnEnterCommandEvent.AddDynamic(this, &ThisClass::ExecutingMenuCommand);
-	MainMenuWidget->LoadSettings(CurrentSettings->MasterVolume);
+	Cast<IInterface_menu>(MainMenuWidget)->SetStartValueMasterVolume(CurrentSettings->MasterScaleVolume, CurrentSettings->MusicVolume, CurrentSettings->GameEffectVolume, CurrentSettings ->UIEffectVolume);
+	Cast<IInterface_menu>(MainMenuWidget)->OnEnterCommand().BindUObject(this, &ThisClass::ExecutingMenuCommand);
+	Cast<IInterface_menu>(MainMenuWidget)->OnChangedSCVolume().BindUObject(this, &UGameInstance_WM::SetSCVolume);
+}
+
+void UGameInstance_WM::SetSCVolume( ESoundClass SC, float NewVolume)
+{
+	check(CurrentSettings);
+	float Volume =FMath::Clamp(NewVolume, 0.002, 1.0);
+	
+	switch (SC)
+	{
+	case ESoundClass::SC_Master:
+		CurrentSettings->MasterScaleVolume = Volume;
+		break;
+	case ESoundClass::SC_Music:
+		CurrentSettings->MusicVolume = Volume;
+		break;
+	case ESoundClass::SC_GameEffects:
+		CurrentSettings->GameEffectVolume = Volume;
+		break;
+	case ESoundClass::SC_UIEffects:
+		CurrentSettings->UIEffectVolume = Volume;
+		break;
+	case ESoundClass::SC_non:
+		return;
+		break;
+	default:
+		break;
+	}
+
+	float Scale = CurrentSettings->MasterScaleVolume;
+
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		UI_Effects_SoundClass,
+		FMath::Max(0.002, CurrentSettings->UIEffectVolume * Scale),
+		1,
+		0
+	);
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		Music_SoundClass,
+		FMath::Max(0.002, CurrentSettings->MusicVolume * Scale),
+		1,
+		0
+	);
+	UGameplayStatics::SetSoundMixClassOverride(GetWorld(),
+		MasterSoundMix,
+		Game_Effects_SoundClass,
+		FMath::Max(0.002, CurrentSettings->GameEffectVolume * Scale),
+		1,
+		0
+	);
 }
 
 bool UGameInstance_WM::Load_Settings()
@@ -103,5 +193,5 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 	default:
 		break;
 	}
-
+	Save_Settings();
 }

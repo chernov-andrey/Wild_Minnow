@@ -15,6 +15,8 @@ class WILD_MINNOW_API USaveGame_Settings : public USaveGame
 	GENERATED_BODY()
 public:
 	UPROPERTY()
-	float MasterVolume = 0.5f;
-
+	float MasterScaleVolume = 0.5f;
+	float MusicVolume = 0.5f;
+	float UIEffectVolume = 0.5f;
+	float GameEffectVolume = 0.5f;
 };
