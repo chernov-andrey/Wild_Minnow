@@ -28,7 +28,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
 	FName MenuLevel_Name;
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ExecutingMenuCommand(EMenuCommand Command);
 
 	UPROPERTY(EditAnywhere)
@@ -36,6 +36,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void OpenMainMenu();
+
+	UFUNCTION(BlueprintCallable)
+	void OpenPauseMenu();
 
 	UPROPERTY()
 	APlayerController* PlayerController;
@@ -68,6 +71,6 @@ public:
 private:
 
 	UUW_MainMenu* MainMenuWidget;
-
+	UUW_MainMenu* PauseMenuWidget;
 
 };

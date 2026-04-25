@@ -15,6 +15,7 @@ enum class EMenuCommand :uint8
 	MC_Settings,
 	MC_Credits,
 	MC_Manual,
+	MC_MainMenu,
 	MC_Exit,
 	NOCOMMAND
 
@@ -56,4 +57,6 @@ public:
 	virtual FOnChangedSettings& OnChangedSCVolume() = 0;
 
 	virtual void SetStartValueMasterVolume(float Master, float Music, float Game, float UI)=0;
+
+	virtual void Convert_to_PauseMenu()= 0;
 };

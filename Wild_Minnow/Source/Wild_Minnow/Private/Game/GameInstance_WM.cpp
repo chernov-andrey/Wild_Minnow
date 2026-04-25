@@ -73,6 +73,27 @@ void UGameInstance_WM::OpenMainMenu()
 	Cast<IInterface_menu>(MainMenuWidget)->OnChangedSCVolume().BindUObject(this, &UGameInstance_WM::SetSCVolume);
 }
 
+void UGameInstance_WM::OpenPauseMenu()
+{
+	check(MainMenuClass);
+	if (PauseMenuWidget == nullptr)
+	{
+		PauseMenuWidget = CreateWidget<UUW_MainMenu>(this, MainMenuClass);
+		PauseMenuWidget->AddToViewport();
+
+		check(PauseMenuWidget);
+		Cast<IInterface_menu>(PauseMenuWidget)->SetStartValueMasterVolume(CurrentSettings->MasterScaleVolume, CurrentSettings->MusicVolume, CurrentSettings->GameEffectVolume, CurrentSettings->UIEffectVolume);
+		Cast<IInterface_menu>(PauseMenuWidget)->OnEnterCommand().BindUObject(this, &ThisClass::ExecutingMenuCommand);
+		Cast<IInterface_menu>(PauseMenuWidget)->OnChangedSCVolume().BindUObject(this, &UGameInstance_WM::SetSCVolume);
+
+		Cast<IInterface_menu>(PauseMenuWidget)->Convert_to_PauseMenu();
+	}
+	else 
+	{ 
+		UE_LOG(LogTemp, Warning, TEXT("UGameInstance_WM::OpenPauseMenu: Attempt open pause menu when opened other pause Menu")); 
+	}
+}
+
 void UGameInstance_WM::SetSCVolume( ESoundClass SC, float NewVolume)
 {
 	check(CurrentSettings);
@@ -171,10 +192,30 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 	{
 	case EMenuCommand::MC_NewGame:
 		UGameplayStatics::OpenLevel(GetWorld(), StartLevel_Name);
-		MainMenuWidget->RemoveFromParent();
+		
+		if (MainMenuWidget) 
+		{
+			MainMenuWidget->RemoveFromParent(); 
+			MainMenuWidget = nullptr;
+		}
+		if (PauseMenuWidget)
+		{
+			PauseMenuWidget->RemoveFromParent();
+			PauseMenuWidget = nullptr;
+		}
 		break;
 	case EMenuCommand::MC_LoadGame:
 
+		if (PauseMenuWidget)
+		{
+			PauseMenuWidget->RemoveFromParent();
+			PauseMenuWidget = nullptr;
+		}
+		if (MainMenuWidget)
+		{
+			MainMenuWidget->RemoveFromParent();
+			MainMenuWidget = nullptr;
+		}
 		break;
 	case EMenuCommand::MC_Settings:
 
@@ -184,6 +225,9 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 		break;
 	case EMenuCommand::MC_Manual:
 
+		break;
+	case EMenuCommand::MC_MainMenu:
+		UGameplayStatics::OpenLevel(GetWorld(), MenuLevel_Name);
 		break;
 	case EMenuCommand::MC_Exit:
 		PlayerController->ConsoleCommand("quit");
