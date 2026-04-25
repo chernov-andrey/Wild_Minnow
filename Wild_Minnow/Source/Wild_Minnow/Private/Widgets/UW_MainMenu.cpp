@@ -41,6 +41,9 @@ void UUW_MainMenu::NativeConstruct()
 	check(StartNewGameButton);
 	StartNewGameButton->OnClicked.AddDynamic(this,&ThisClass::OnStartNewGameButtonClicked);
 
+	check(LoadGameButton);
+	LoadGameButton->OnClicked.AddDynamic(this, &ThisClass::OnLoadGameButtonClicked);
+
 	check(ExitGameButton);
 	ExitGameButton->OnClicked.AddDynamic(this, &ThisClass::OnExitGameButtonClicked);
 

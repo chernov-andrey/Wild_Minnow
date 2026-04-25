@@ -25,73 +25,85 @@ public:
 	virtual FOnEnterCommand& OnEnterCommand() override;
 	virtual FOnChangedSettings& OnChangedSCVolume()override;
 	virtual void SetStartValueMasterVolume(float Master, float Music, float Game, float UI) override;
+	          
+	UFUNCTION(BlueprintImplementableEvent)
+	void Convert_to_PauseMenu() override;
 
 protected:
 
 	virtual void NativeConstruct() override;
 
-private:
+
 	// NewGameButton --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* StartNewGameButton;
 	
 	UFUNCTION()
 	void OnStartNewGameButtonClicked();
 
 	//Open manual Button --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* OpenManualButton;
-protected:
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnOpenManualButtonClicked();
-private:
+
+
 	//Open Settings Button --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* OpenSettingsButton;
-protected:
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnOpenSettingsButtonClicked();
-private:
+
+	//LoadGame Button --------------------------------------------------------------------------
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UButton* LoadGameButton;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnLoadGameButtonClicked();
+
+
 	//ExitGameButton --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UButton* ExitGameButton;
 	
 	UFUNCTION()
 	void OnExitGameButtonClicked();
 
-protected:
+
 	//Master volume slider --------------------------------------------------------------------------
 	UPROPERTY(BlueprintReadWrite,meta = (BindWidget))
 	USlider* MasterVolumeSlider;
-private:
+
 	UFUNCTION()
 	void OnMasterVolumeSliderChanged(float Value);
-protected:
+
 	//Master 2 volume slider --------------------------------------------------------------------------
 	UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
 	USlider* MasterVolumeSlider_2;
-private:
+
 	UFUNCTION()
 	void OnMasterVolumeSlider_2_Changed(float Value);
 
 
 
 	//Music volume slider --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	USlider* MusicVolumeSlider;
 
 	UFUNCTION()
 	void OnMusicVolumeSliderChanged(float Value);
 
 	//GameEffects volume slider --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	USlider* GameEffectsVolumeSlider;
 
 	UFUNCTION()
 	void OnGameEffectsVolumeSliderChanged(float Value);
 
 	//UIEffects volume slider --------------------------------------------------------------------------
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	USlider* UIEffectsVolumeSlider;
 
 	UFUNCTION()
