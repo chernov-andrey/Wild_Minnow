@@ -230,7 +230,7 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 		UGameplayStatics::OpenLevel(GetWorld(), MenuLevel_Name);
 		break;
 	case EMenuCommand::MC_Exit:
-		PlayerController->ConsoleCommand("quit");
+		PlayerController->ConsoleCommand("quit");//////////////////////////////////
 		break;
 	case EMenuCommand::NOCOMMAND:
 		break;
