@@ -42,7 +42,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OpenPauseMenu();
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	APlayerController* PlayerController;
 
 	UPROPERTY(BlueprintReadOnly)
