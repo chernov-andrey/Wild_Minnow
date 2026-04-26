@@ -4,6 +4,7 @@
 #include "Widgets/UW_MainMenu.h"
 #include "Components/Button.h"
 #include "Components/Slider.h"
+#include "Widgets/Button_with_Text.h"
 
 
 FOnEnterCommand& UUW_MainMenu::OnEnterCommand()
@@ -16,8 +17,12 @@ FOnChangedSettings& UUW_MainMenu::OnChangedSCVolume()
 	return OnChangedSCVolumeEvent;
 }
 
-void UUW_MainMenu::SetStartValueMasterVolume(float Master,float Music, float Game, float UI)
+void UUW_MainMenu::SetStartValueMasterVolume(bool showPlashScreen,float Master,float Music, float Game, float UI)
 {
+	if (showPlashScreen)
+	{
+		ShowSplashScreen();
+	}
 	check(MasterVolumeSlider);
 	MasterVolumeSlider->SetValue(Master);
 	check(MasterVolumeSlider_2);
@@ -31,6 +36,7 @@ void UUW_MainMenu::SetStartValueMasterVolume(float Master,float Music, float Gam
 
 	check(UIEffectsVolumeSlider);
 	UIEffectsVolumeSlider->SetValue(UI);
+	InitializeComplete();
 }
 
 
@@ -39,19 +45,19 @@ void UUW_MainMenu::NativeConstruct()
 	Super::NativeConstruct();
 
 	check(StartNewGameButton);
-	StartNewGameButton->OnClicked.AddDynamic(this,&ThisClass::OnStartNewGameButtonClicked);
+	StartNewGameButton->OnClickButtonEvent.AddDynamic(this,&ThisClass::OnStartNewGameButtonClicked);
 
 	check(LoadGameButton);
-	LoadGameButton->OnClicked.AddDynamic(this, &ThisClass::OnLoadGameButtonClicked);
+	LoadGameButton->OnClickButtonEvent.AddDynamic(this, &ThisClass::OnLoadGameButtonClicked);
 
 	check(ExitGameButton);
-	ExitGameButton->OnClicked.AddDynamic(this, &ThisClass::OnExitGameButtonClicked);
+	ExitGameButton->OnClickButtonEvent.AddDynamic(this, &ThisClass::OnExitGameButtonClicked);
 
 	check(OpenSettingsButton);
-	OpenSettingsButton->OnClicked.AddDynamic(this, &ThisClass::OnOpenSettingsButtonClicked);
+	OpenSettingsButton->OnClickButtonEvent.AddDynamic(this, &ThisClass::OnOpenSettingsButtonClicked);
 	
 	check(OpenManualButton);
-	OpenManualButton->OnClicked.AddDynamic(this, &ThisClass::OnOpenManualButtonClicked);
+	OpenManualButton->OnClickButtonEvent.AddDynamic(this, &ThisClass::OnOpenManualButtonClicked);
 	
 	check(MasterVolumeSlider);
 	MasterVolumeSlider->OnValueChanged.AddDynamic(this, &ThisClass::OnMasterVolumeSliderChanged);

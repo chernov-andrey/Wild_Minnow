@@ -9,7 +9,7 @@
 
 class UButton;
 class USlider;
-
+class UButton_with_Text;
 
 UCLASS()
 class WILD_MINNOW_API UUW_MainMenu : public UUserWidget, public IInterface_menu
@@ -24,11 +24,16 @@ public:
 
 	virtual FOnEnterCommand& OnEnterCommand() override;
 	virtual FOnChangedSettings& OnChangedSCVolume()override;
-	virtual void SetStartValueMasterVolume(float Master, float Music, float Game, float UI) override;
+	virtual void SetStartValueMasterVolume(bool showPlashScreen,float Master, float Music, float Game, float UI) override;
 	          
 	UFUNCTION(BlueprintImplementableEvent)
 	void Convert_to_PauseMenu() override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowSplashScreen();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void InitializeComplete();
 protected:
 
 	virtual void NativeConstruct() override;
@@ -36,14 +41,14 @@ protected:
 
 	// NewGameButton --------------------------------------------------------------------------
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UButton* StartNewGameButton;
+	UButton_with_Text* StartNewGameButton;
 	
 	UFUNCTION()
 	void OnStartNewGameButtonClicked();
 
 	//Open manual Button --------------------------------------------------------------------------
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UButton* OpenManualButton;
+	UButton_with_Text* OpenManualButton;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnOpenManualButtonClicked();
@@ -51,14 +56,14 @@ protected:
 
 	//Open Settings Button --------------------------------------------------------------------------
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UButton* OpenSettingsButton;
+	UButton_with_Text* OpenSettingsButton;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnOpenSettingsButtonClicked();
 
 	//LoadGame Button --------------------------------------------------------------------------
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UButton* LoadGameButton;
+	UButton_with_Text* LoadGameButton;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnLoadGameButtonClicked();
@@ -66,7 +71,7 @@ protected:
 
 	//ExitGameButton --------------------------------------------------------------------------
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
-	UButton* ExitGameButton;
+	UButton_with_Text* ExitGameButton;
 	
 	UFUNCTION()
 	void OnExitGameButtonClicked();

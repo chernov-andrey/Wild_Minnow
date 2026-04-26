@@ -68,9 +68,10 @@ void UGameInstance_WM::OpenMainMenu()
 	MainMenuWidget->AddToViewport();
 
 	check(MainMenuWidget);
-	Cast<IInterface_menu>(MainMenuWidget)->SetStartValueMasterVolume(CurrentSettings->MasterScaleVolume, CurrentSettings->MusicVolume, CurrentSettings->GameEffectVolume, CurrentSettings ->UIEffectVolume);
+	Cast<IInterface_menu>(MainMenuWidget)->SetStartValueMasterVolume(FirstRun,CurrentSettings->MasterScaleVolume, CurrentSettings->MusicVolume, CurrentSettings->GameEffectVolume, CurrentSettings ->UIEffectVolume);
 	Cast<IInterface_menu>(MainMenuWidget)->OnEnterCommand().BindUObject(this, &ThisClass::ExecutingMenuCommand);
 	Cast<IInterface_menu>(MainMenuWidget)->OnChangedSCVolume().BindUObject(this, &UGameInstance_WM::SetSCVolume);
+	FirstRun = false;
 }
 
 void UGameInstance_WM::OpenPauseMenu()
@@ -82,7 +83,7 @@ void UGameInstance_WM::OpenPauseMenu()
 		PauseMenuWidget->AddToViewport();
 
 		check(PauseMenuWidget);
-		Cast<IInterface_menu>(PauseMenuWidget)->SetStartValueMasterVolume(CurrentSettings->MasterScaleVolume, CurrentSettings->MusicVolume, CurrentSettings->GameEffectVolume, CurrentSettings->UIEffectVolume);
+		Cast<IInterface_menu>(PauseMenuWidget)->SetStartValueMasterVolume(false,CurrentSettings->MasterScaleVolume, CurrentSettings->MusicVolume, CurrentSettings->GameEffectVolume, CurrentSettings->UIEffectVolume);
 		Cast<IInterface_menu>(PauseMenuWidget)->OnEnterCommand().BindUObject(this, &ThisClass::ExecutingMenuCommand);
 		Cast<IInterface_menu>(PauseMenuWidget)->OnChangedSCVolume().BindUObject(this, &UGameInstance_WM::SetSCVolume);
 

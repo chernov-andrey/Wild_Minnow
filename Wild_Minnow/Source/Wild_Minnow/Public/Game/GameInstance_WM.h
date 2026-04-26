@@ -18,6 +18,8 @@ UCLASS()
 class WILD_MINNOW_API UGameInstance_WM : public UGameInstance
 {
 	GENERATED_BODY()
+private:
+	bool FirstRun = true;
 
 public:
 	virtual void Init() override;

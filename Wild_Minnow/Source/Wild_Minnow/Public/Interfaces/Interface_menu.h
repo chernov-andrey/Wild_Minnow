@@ -56,7 +56,7 @@ public:
 
 	virtual FOnChangedSettings& OnChangedSCVolume() = 0;
 
-	virtual void SetStartValueMasterVolume(float Master, float Music, float Game, float UI)=0;
+	virtual void SetStartValueMasterVolume(bool showPlashScreen,float Master, float Music, float Game, float UI)=0;
 
 	virtual void Convert_to_PauseMenu()= 0;
 };
