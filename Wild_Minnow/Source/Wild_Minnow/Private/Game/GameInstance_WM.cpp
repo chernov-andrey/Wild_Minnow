@@ -203,6 +203,7 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 		{
 			PauseMenuWidget->RemoveFromParent();
 			PauseMenuWidget = nullptr;
+			FOnClosePauseMenuEvent.Broadcast();
 		}
 		break;
 	case EMenuCommand::MC_LoadGame:
@@ -211,6 +212,7 @@ void UGameInstance_WM::ExecutingMenuCommand(EMenuCommand Command)
 		{
 			PauseMenuWidget->RemoveFromParent();
 			PauseMenuWidget = nullptr;
+			FOnClosePauseMenuEvent.Broadcast();
 		}
 		if (MainMenuWidget)
 		{

@@ -24,6 +24,10 @@ private:
 public:
 	virtual void Init() override;
 
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnClosePauseMenu);
+	UPROPERTY(BlueprintAssignable)
+	FOnClosePauseMenu FOnClosePauseMenuEvent;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Map")
 	FName StartLevel_Name;
 
